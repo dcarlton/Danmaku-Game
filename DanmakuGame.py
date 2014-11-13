@@ -12,6 +12,7 @@ pygame.event.set_allowed(None)
 pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, pygame.USEREVENT])
 
 class Shot:
+    hitbox = pygame.Rect(0, 0, 16, 16)
     xPosition = 0
     yPosition = 0
     xSpeed = 0
@@ -21,8 +22,12 @@ class Shot:
     def update(self):
         self.xPosition += self.xSpeed
         self.yPosition += self.ySpeed
+        self.hitbox.left = self.xPosition
+        self.hitbox.top = self.yPosition
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
             objects.remove(self)
+        if self.hitbox.colliderect(player.hitbox):
+            print "Successful hit at " + str(datetime.now().second) + " seconds!"
 
 class Enemy(Shot):
     image = pygame.image.load("images/KyokoStanding.png").convert()
@@ -44,11 +49,15 @@ class Enemy(Shot):
     def update(self):
         pass
 
-class Player(Shot):
+class Player:
     image = pygame.image.load("images/KyokoStanding.png").convert()
-    move = "No"
+    moveV = "No"
+    moveH = "No"
+    hitbox = pygame.Rect(0, 0, 16, 16)
     xPosition = 320
     yPosition = 240
+    xSpeed = 0
+    ySpeed = 0
 
     def update(self):
         for event in pygame.event.get([pygame.KEYDOWN, pygame.KEYUP]):
@@ -56,18 +65,32 @@ class Player(Shot):
                 if event.key == pygame.K_ESCAPE:
                     exit()
                 if event.key == pygame.K_UP:
-                    self.move = "Up"
-                if event.key == pygame.K_DOWN:
-                    self.move = "Down"
+                    self.moveV = "Up"
+                elif event.key == pygame.K_DOWN:
+                    self.moveV = "Down"
+                elif event.key == pygame.K_LEFT:
+                    self.moveH = "Left"
+                elif event.key == pygame.K_RIGHT:
+                    self.moveH = "Right"
             elif event.type == pygame.KEYUP:
-                self.move = "No"
-        if self.move == "Up":
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    self.moveV = "No"
+                elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    self.moveH = "No"
+        if self.moveV == "Up":
             self.yPosition -= 1
-        elif self.move == "Down":
+        elif self.moveV == "Down":
             self.yPosition += 1
+        if self.moveH == "Left":
+            self.xPosition -= 1
+        elif self.moveH == "Right":
+            self.xPosition += 1
+        self.hitbox.left = self.xPosition
+        self.hitbox.top = self.yPosition
 
 
 player = Player()
+player.hitbox.move_ip(player.xPosition, player.yPosition)
 objects.append(player)
 
 enemy1 = Enemy()
@@ -118,6 +141,6 @@ while True:
 
     endTime = datetime.now()
     delta = (endTime - startTime).microseconds
-    if delta < 326667:
-        waitTime = (326667 - delta) / 1000000
+    if delta < 166667:
+        waitTime = (166667 - delta) / 1000000
         time.sleep(waitTime)

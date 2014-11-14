@@ -6,6 +6,7 @@ import time
 
 sys.path.append("./src")
 
+from Character import Character
 from Enumerations import EventType
 from Object import Object
 
@@ -14,7 +15,13 @@ objects = []
 screen = pygame.display.set_mode((640, 480))
 
 pygame.event.set_allowed(None)
-pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, EventType.registerDakka])
+pygame.event.set_allowed([pygame.KEYDOWN,
+                          pygame.KEYUP,
+                          EventType.registerDakka,
+                          EventType.unregisterDakka,
+                          EventType.registerCharacter,
+                          EventType.unregisterCharacter
+                          ])
 
 class Dakka(Object):
     def __init__(self):
@@ -25,19 +32,27 @@ class Dakka(Object):
         self.xPosition = 0
         self.yPosition = 0
 
+    def register(self):
+        event = pygame.event.Event(EventType.registerDakka, {"dakka": self})
+        pygame.event.post(event)
+
+    def unregister(self):
+        event = pygame.event.Event(EventType.unregisterDakka, {"dakka": self})
+        pygame.event.post(event)
+
     def update(self):
         super(Dakka, self).update()
         self.hitbox.left = self.xPosition
         self.hitbox.top = self.yPosition
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
-            objects.remove(self)
+            self.unregister()
             return
         for thingy in characters:
             if self.hitbox.colliderect(thingy.hitbox) and thingy.hit(self):
-                objects.remove(self)
+                self.unregister()
                 return
 
-class Enemy(Object):
+class Enemy(Character):
     def __init__(self):
         super(Enemy, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
@@ -50,7 +65,7 @@ class Enemy(Object):
         angle = 1.5 * math.pi
         while True:
             if self.hp <= 0:
-                characters.remove(self)
+                self.unregister()
                 thread.exit()
 
             dakka = Dakka()
@@ -59,8 +74,7 @@ class Enemy(Object):
             dakka.xSpeed = 6 * math.sin(angle)
             dakka.ySpeed = 6 * math.cos(angle)
             dakka.target = "Player"
-            event = pygame.event.Event(EventType.registerDakka, {"dakka": dakka})
-            pygame.event.post(event)
+            dakka.register()
 
             angle += (0.25 * math.pi)
             time.sleep(0.25)
@@ -71,7 +85,7 @@ class Enemy(Object):
             return True
         return False
 
-class Player(Object):
+class Player(Character):
     def __init__(self):
         super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
@@ -127,15 +141,14 @@ class Player(Object):
                 dakka.yPosition = player.yPosition - 16
                 dakka.ySpeed = -6
                 dakka.target = "Enemy"
-                event = pygame.event.Event(EventType.registerDakka, {"dakka": dakka})
-                pygame.event.post(event)
+                dakka.register()
 
                 self.dakkaDelay = 4
 
 
 player = Player()
 player.hitbox.move_ip(player.xPosition, player.yPosition)
-characters.append(player)
+player.register()
 
 enemy1 = Enemy()
 enemy1.xPosition = 100
@@ -143,7 +156,7 @@ enemy1.yPosition = 100
 enemy1.hitbox.left = enemy1.xPosition
 enemy1.hitbox.top = enemy1.yPosition
 thread.start_new_thread(enemy1.fire, ())
-characters.append(enemy1)
+enemy1.register()
 
 enemy2 = Enemy()
 enemy2.xPosition = 540
@@ -151,7 +164,7 @@ enemy2.yPosition = 100
 enemy2.hitbox.left = enemy2.xPosition
 enemy2.hitbox.top = enemy2.yPosition
 thread.start_new_thread(enemy2.fire, ())
-characters.append(enemy2)
+enemy2.register()
 
 enemy3 = Enemy()
 enemy3.xPosition = 100
@@ -159,7 +172,7 @@ enemy3.yPosition = 250
 enemy3.hitbox.left = enemy3.xPosition
 enemy3.hitbox.top = enemy3.yPosition
 thread.start_new_thread(enemy3.fire, ())
-characters.append(enemy3)
+enemy3.register()
 
 enemy4 = Enemy()
 enemy4.xPosition = 540
@@ -167,7 +180,7 @@ enemy4.yPosition = 250
 enemy4.hitbox.left = enemy4.xPosition
 enemy4.hitbox.top = enemy4.yPosition
 thread.start_new_thread(enemy4.fire, ())
-characters.append(enemy4)
+enemy4.register()
 
 enemy5 = Enemy()
 enemy5.xPosition = 100
@@ -175,7 +188,7 @@ enemy5.yPosition = 400
 enemy5.hitbox.left = enemy5.xPosition
 enemy5.hitbox.top = enemy5.yPosition
 thread.start_new_thread(enemy5.fire, ())
-characters.append(enemy5)
+enemy5.register()
 
 enemy6 = Enemy()
 enemy6.xPosition = 540
@@ -183,12 +196,18 @@ enemy6.yPosition = 400
 enemy6.hitbox.left = enemy6.xPosition
 enemy6.hitbox.top = enemy6.yPosition
 thread.start_new_thread(enemy6.fire, ())
-characters.append(enemy6)
+enemy6.register()
 
 clock = pygame.time.Clock()
 while True:
     for event in pygame.event.get(EventType.registerDakka):
         objects.append(event.dakka)
+    for event in pygame.event.get(EventType.unregisterDakka):
+        objects.remove(event.dakka)
+    for event in pygame.event.get(EventType.registerCharacter):
+        characters.append(event.character)
+    for event in pygame.event.get(EventType.unregisterCharacter):
+        characters.remove(event.character)
     screen.fill((255, 255, 255))
     for thingy in characters:
         thingy.update()

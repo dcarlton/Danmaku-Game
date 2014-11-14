@@ -22,8 +22,6 @@ class Dakka(Object):
 
     def update(self):
         super(Dakka, self).update()
-        self.hitbox.left = self.xPosition
-        self.hitbox.top = self.yPosition
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
             self.unregister()
             return

@@ -15,3 +15,5 @@ class Object(object):
         self.ySpeed += self.yAcceleration
         self.xPosition += self.xSpeed
         self.yPosition += self.ySpeed
+        self.hitbox.left = self.xPosition
+        self.hitbox.top = self.yPosition

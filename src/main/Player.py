@@ -14,6 +14,19 @@ class Player(Character):
         self.yPosition = 240
         self.dakkaDelay = 0
 
+    def fire(self):
+        if self.dakkaDelay != 0:
+            self.dakkaDelay -= 1
+        else:
+            dakka = Dakka()
+            dakka.xPosition = self.xPosition
+            dakka.yPosition = self.yPosition - 16
+            dakka.ySpeed = -6
+            dakka.target = "Enemy"
+            dakka.register()
+
+            self.dakkaDelay = 4
+
     def hit(self, dakka):
         if dakka.target == "Player":
             print "Hit!"
@@ -48,18 +61,6 @@ class Player(Character):
                     self.firing = False
 
         super(Player, self).update()
-        self.hitbox.left = self.xPosition
-        self.hitbox.top = self.yPosition
 
         if self.firing:
-            if self.dakkaDelay != 0:
-                self.dakkaDelay -= 1
-            else:
-                dakka = Dakka()
-                dakka.xPosition = self.xPosition
-                dakka.yPosition = self.yPosition - 16
-                dakka.ySpeed = -6
-                dakka.target = "Enemy"
-                dakka.register()
-
-                self.dakkaDelay = 4
+            self.fire()

@@ -6,6 +6,7 @@ import time
 
 sys.path.append("./src")
 
+from Enumerations import EventType
 from Object import Object
 
 characters = []
@@ -13,7 +14,7 @@ objects = []
 screen = pygame.display.set_mode((640, 480))
 
 pygame.event.set_allowed(None)
-pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, pygame.USEREVENT])
+pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, EventType.registerDakka])
 
 class Dakka(Object):
     def __init__(self):
@@ -58,7 +59,7 @@ class Enemy(Object):
             dakka.xSpeed = 6 * math.sin(angle)
             dakka.ySpeed = 6 * math.cos(angle)
             dakka.target = "Player"
-            event = pygame.event.Event(pygame.USEREVENT, {"dakka": dakka})
+            event = pygame.event.Event(EventType.registerDakka, {"dakka": dakka})
             pygame.event.post(event)
 
             angle += (0.25 * math.pi)
@@ -126,7 +127,7 @@ class Player(Object):
                 dakka.yPosition = player.yPosition - 16
                 dakka.ySpeed = -6
                 dakka.target = "Enemy"
-                event = pygame.event.Event(pygame.USEREVENT, {"dakka": dakka})
+                event = pygame.event.Event(EventType.registerDakka, {"dakka": dakka})
                 pygame.event.post(event)
 
                 self.dakkaDelay = 4
@@ -186,7 +187,7 @@ characters.append(enemy6)
 
 clock = pygame.time.Clock()
 while True:
-    for event in pygame.event.get(pygame.USEREVENT):
+    for event in pygame.event.get(EventType.registerDakka):
         objects.append(event.dakka)
     screen.fill((255, 255, 255))
     for thingy in characters:

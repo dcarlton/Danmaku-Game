@@ -1,4 +1,3 @@
-from datetime import datetime
 import math
 import pygame
 import sys
@@ -83,7 +82,7 @@ class Player(Object):
 
     def hit(self, shot):
         if shot.target == "Player":
-            print "Successful hit at " + str(datetime.now().second) + " seconds!"
+            print "Hit!"
             return True
         return False
 
@@ -187,7 +186,6 @@ characters.append(enemy6)
 
 clock = pygame.time.Clock()
 while True:
-    #startTime = datetime.now()
     for event in pygame.event.get(pygame.USEREVENT):
         objects.append(event.shot)
     screen.fill((255, 255, 255))
@@ -200,10 +198,3 @@ while True:
     pygame.display.flip()
 
     clock.tick(60)
-    """
-    endTime = datetime.now()
-    delta = (endTime - startTime).microseconds
-    if delta < 166667:
-        waitTime = (166667 - delta) / 1000000
-        time.sleep(waitTime)
-    """

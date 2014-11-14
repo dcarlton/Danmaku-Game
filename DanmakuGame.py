@@ -15,9 +15,9 @@ screen = pygame.display.set_mode((640, 480))
 pygame.event.set_allowed(None)
 pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, pygame.USEREVENT])
 
-class Shot(Object):
+class Dakka(Object):
     def __init__(self):
-        super(Shot, self).__init__()
+        super(Dakka, self).__init__()
         self.hitbox = pygame.Rect(0, 0, 16, 16)
         self.image = pygame.image.load("images/RedBall.png").convert()
         self.target = None
@@ -25,7 +25,7 @@ class Shot(Object):
         self.yPosition = 0
 
     def update(self):
-        super(Shot, self).update()
+        super(Dakka, self).update()
         self.hitbox.left = self.xPosition
         self.hitbox.top = self.yPosition
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
@@ -52,20 +52,20 @@ class Enemy(Object):
                 characters.remove(self)
                 thread.exit()
 
-            shot = Shot()
-            shot.xPosition = self.xPosition
-            shot.yPosition = self.yPosition
-            shot.xSpeed = 6 * math.sin(angle)
-            shot.ySpeed = 6 * math.cos(angle)
-            shot.target = "Player"
-            event = pygame.event.Event(pygame.USEREVENT, {"shot": shot})
+            dakka = Dakka()
+            dakka.xPosition = self.xPosition
+            dakka.yPosition = self.yPosition
+            dakka.xSpeed = 6 * math.sin(angle)
+            dakka.ySpeed = 6 * math.cos(angle)
+            dakka.target = "Player"
+            event = pygame.event.Event(pygame.USEREVENT, {"dakka": dakka})
             pygame.event.post(event)
 
             angle += (0.25 * math.pi)
             time.sleep(0.25)
 
-    def hit(self, shot):
-        if shot.target == "Enemy":
+    def hit(self, dakka):
+        if dakka.target == "Enemy":
             self.hp -= 1
             return True
         return False
@@ -78,10 +78,10 @@ class Player(Object):
         self.hitbox = pygame.Rect(0, 0, 16, 16)
         self.xPosition = 320
         self.yPosition = 240
-        self.shotDelay = 0
+        self.dakkaDelay = 0
 
-    def hit(self, shot):
-        if shot.target == "Player":
+    def hit(self, dakka):
+        if dakka.target == "Player":
             print "Hit!"
             return True
         return False
@@ -118,18 +118,18 @@ class Player(Object):
         self.hitbox.top = self.yPosition
 
         if self.firing:
-            if self.shotDelay != 0:
-                self.shotDelay -= 1
+            if self.dakkaDelay != 0:
+                self.dakkaDelay -= 1
             else:
-                shot = Shot()
-                shot.xPosition = player.xPosition
-                shot.yPosition = player.yPosition - 16
-                shot.ySpeed = -6
-                shot.target = "Enemy"
-                event = pygame.event.Event(pygame.USEREVENT, {"shot": shot})
+                dakka = Dakka()
+                dakka.xPosition = player.xPosition
+                dakka.yPosition = player.yPosition - 16
+                dakka.ySpeed = -6
+                dakka.target = "Enemy"
+                event = pygame.event.Event(pygame.USEREVENT, {"dakka": dakka})
                 pygame.event.post(event)
 
-                self.shotDelay = 4
+                self.dakkaDelay = 4
 
 
 player = Player()
@@ -187,7 +187,7 @@ characters.append(enemy6)
 clock = pygame.time.Clock()
 while True:
     for event in pygame.event.get(pygame.USEREVENT):
-        objects.append(event.shot)
+        objects.append(event.dakka)
     screen.fill((255, 255, 255))
     for thingy in characters:
         thingy.update()

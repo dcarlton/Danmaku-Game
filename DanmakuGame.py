@@ -1,16 +1,10 @@
-import math
 import pygame
-import sys
 import thread
-import time
+import sys
 
 sys.path.append("./src")
-
-from Character import Character
-from Dakka import Dakka
 from Enemy import Enemy
 from Enumerations import EventType
-from Object import Object
 from Player import Player
 from Updater import Updater
 

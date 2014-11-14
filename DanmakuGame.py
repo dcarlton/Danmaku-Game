@@ -12,10 +12,10 @@ from Enemy import Enemy
 from Enumerations import EventType
 from Object import Object
 from Player import Player
+from Updater import Updater
 
-characters = []
-objects = []
 screen = pygame.display.set_mode((640, 480))
+updater = Updater()
 
 pygame.event.set_allowed(None)
 pygame.event.set_allowed([pygame.KEYDOWN,
@@ -81,25 +81,5 @@ enemy6.register()
 
 clock = pygame.time.Clock()
 while True:
-    for event in pygame.event.get(EventType.registerDakka):
-        objects.append(event.dakka)
-    for event in pygame.event.get(EventType.unregisterDakka):
-        objects.remove(event.dakka)
-    for event in pygame.event.get(EventType.registerCharacter):
-        characters.append(event.character)
-    for event in pygame.event.get(EventType.unregisterCharacter):
-        characters.remove(event.character)
-
-    screen.fill((255, 255, 255))
-    for thingy in objects:
-        for character in characters:
-            if thingy.hitbox.colliderect(character.hitbox) and character.hit(thingy):
-                thingy.unregister()
-        thingy.update()
-        screen.blit(thingy.image, (thingy.xPosition, thingy.yPosition))
-    for thingy in characters:
-        thingy.update()
-        screen.blit(thingy.image, (thingy.xPosition, thingy.yPosition))
-    pygame.display.flip()
-
+    updater.update()
     clock.tick(60)

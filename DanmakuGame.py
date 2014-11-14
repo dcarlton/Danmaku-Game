@@ -5,6 +5,10 @@ import sys
 import thread
 import time
 
+sys.path.append("./src")
+
+from Object import Object
+
 characters = []
 objects = []
 screen = pygame.display.set_mode((640, 480))
@@ -12,19 +16,17 @@ screen = pygame.display.set_mode((640, 480))
 pygame.event.set_allowed(None)
 pygame.event.set_allowed([pygame.KEYDOWN, pygame.KEYUP, pygame.USEREVENT])
 
-class Shot:
+class Shot(Object):
     def __init__(self):
+        super(Shot, self).__init__()
         self.hitbox = pygame.Rect(0, 0, 16, 16)
-        self.xPosition = 0
-        self.yPosition = 0
-        self.xSpeed = 0
-        self.ySpeed = 0
         self.image = pygame.image.load("images/RedBall.png").convert()
         self.target = None
+        self.xPosition = 0
+        self.yPosition = 0
 
     def update(self):
-        self.xPosition += self.xSpeed
-        self.yPosition += self.ySpeed
+        super(Shot, self).update()
         self.hitbox.left = self.xPosition
         self.hitbox.top = self.yPosition
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
@@ -35,15 +37,14 @@ class Shot:
                 objects.remove(self)
                 return
 
-class Enemy:
+class Enemy(Object):
     def __init__(self):
+        super(Enemy, self).__init__()
+        self.image = pygame.image.load("images/KyokoStanding.png").convert()
         self.hitbox = pygame.Rect(0, 0, 16, 16)
+        self.hp = 50
         self.xPosition = 0
         self.yPosition = 0
-        self.xSpeed = 0
-        self.ySpeed = 0
-        self.image = pygame.image.load("images/KyokoStanding.png").convert()
-        self.hp = 100
 
     def fire(self):
         angle = 1.5 * math.pi
@@ -70,20 +71,14 @@ class Enemy:
             return True
         return False
 
-    def update(self):
-        pass
-
-class Player:
+class Player(Object):
     def __init__(self):
+        super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
-        self.moveV = "No"
-        self.moveH = "No"
         self.firing = False
         self.hitbox = pygame.Rect(0, 0, 16, 16)
         self.xPosition = 320
         self.yPosition = 240
-        self.xSpeed = 0
-        self.ySpeed = 0
         self.shotDelay = 0
 
     def hit(self, shot):
@@ -98,30 +93,31 @@ class Player:
                 if event.key == pygame.K_ESCAPE:
                     exit()
                 elif event.key == pygame.K_UP:
-                    self.moveV = "Up"
+                    self.ySpeed -= 6
                 elif event.key == pygame.K_DOWN:
-                    self.moveV = "Down"
+                    self.ySpeed += 6
                 elif event.key == pygame.K_LEFT:
-                    self.moveH = "Left"
+                    self.xSpeed -= 6
                 elif event.key == pygame.K_RIGHT:
-                    self.moveH = "Right"
+                    self.xSpeed += 6
                 elif event.key == pygame.K_SEMICOLON:
                     self.firing = True
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    self.moveV = "No"
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    self.moveH = "No"
+                if event.key == pygame.K_UP:
+                    self.ySpeed += 6
+                elif event.key == pygame.K_DOWN:
+                    self.ySpeed -= 6
+                elif event.key == pygame.K_LEFT:
+                    self.xSpeed += 6
+                elif event.key == pygame.K_RIGHT:
+                    self.xSpeed -= 6
                 elif event.key == pygame.K_SEMICOLON:
                     self.firing = False
-        if self.moveV == "Up":
-            self.yPosition -= 6
-        elif self.moveV == "Down":
-            self.yPosition += 6
-        if self.moveH == "Left":
-            self.xPosition -= 6
-        elif self.moveH == "Right":
-            self.xPosition += 6
+
+        super(Player, self).update()
+        self.hitbox.left = self.xPosition
+        self.hitbox.top = self.yPosition
+
         if self.firing:
             if self.shotDelay != 0:
                 self.shotDelay -= 1
@@ -135,9 +131,6 @@ class Player:
                 pygame.event.post(event)
 
                 self.shotDelay = 4
-
-        self.hitbox.left = self.xPosition
-        self.hitbox.top = self.yPosition
 
 
 player = Player()

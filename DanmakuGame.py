@@ -47,10 +47,6 @@ class Dakka(Object):
         if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
             self.unregister()
             return
-        for thingy in characters:
-            if self.hitbox.colliderect(thingy.hitbox) and thingy.hit(self):
-                self.unregister()
-                return
 
 class Enemy(Character):
     def __init__(self):
@@ -208,11 +204,15 @@ while True:
         characters.append(event.character)
     for event in pygame.event.get(EventType.unregisterCharacter):
         characters.remove(event.character)
+
     screen.fill((255, 255, 255))
-    for thingy in characters:
+    for thingy in objects:
+        for character in characters:
+            if thingy.hitbox.colliderect(character.hitbox) and character.hit(thingy):
+                thingy.unregister()
         thingy.update()
         screen.blit(thingy.image, (thingy.xPosition, thingy.yPosition))
-    for thingy in objects:
+    for thingy in characters:
         thingy.update()
         screen.blit(thingy.image, (thingy.xPosition, thingy.yPosition))
     pygame.display.flip()

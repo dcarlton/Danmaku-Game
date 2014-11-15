@@ -8,13 +8,13 @@ from Dakka import Dakka
 from Enumerations import EventType
 
 class Enemy(Character):
-    def __init__(self):
+    def __init__(self, x, y):
         super(Enemy, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
-        self.hitbox = pygame.Rect(0, 0, 16, 16)
+        self.hitbox = pygame.Rect(x, y, 16, 16)
         self.hp = 50
-        self.xPosition = 0
-        self.yPosition = 0
+        self.xPosition = x
+        self.yPosition = y
 
     def fire(self):
         angle = 1.5 * math.pi
@@ -23,9 +23,7 @@ class Enemy(Character):
                 self.unregister()
                 thread.exit()
 
-            dakka = Dakka()
-            dakka.xPosition = self.xPosition
-            dakka.yPosition = self.yPosition
+            dakka = Dakka(self.xPosition, self.yPosition)
             dakka.xSpeed = 6 * math.sin(angle)
             dakka.ySpeed = 6 * math.cos(angle)
             dakka.target = "Player"

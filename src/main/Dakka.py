@@ -4,13 +4,13 @@ from Enumerations import EventType
 from Object import Object
 
 class Dakka(Object):
-    def __init__(self):
+    def __init__(self, x, y):
         super(Dakka, self).__init__()
-        self.hitbox = pygame.Rect(0, 0, 16, 16)
+        self.hitbox = pygame.Rect(x, y, 16, 16)
         self.image = pygame.image.load("images/RedBall.png").convert()
         self.target = None
-        self.xPosition = 0
-        self.yPosition = 0
+        self.xPosition = x
+        self.yPosition = y
 
     def register(self):
         event = pygame.event.Event(EventType.registerDakka, {"dakka": self})

@@ -9,7 +9,7 @@ class Player(Character):
         super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
         self.firing = False
-        self.hitbox = pygame.Rect(0, 0, 16, 16)
+        self.hitbox = pygame.Rect(320, 240, 16, 16)
         self.xPosition = 320
         self.yPosition = 240
         self.dakkaDelay = 0
@@ -18,9 +18,7 @@ class Player(Character):
         if self.dakkaDelay != 0:
             self.dakkaDelay -= 1
         else:
-            dakka = Dakka()
-            dakka.xPosition = self.xPosition
-            dakka.yPosition = self.yPosition - 16
+            dakka = Dakka(self.xPosition, self.yPosition - 16)
             dakka.ySpeed = -6
             dakka.target = "Enemy"
             dakka.register()

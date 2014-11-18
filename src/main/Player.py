@@ -9,7 +9,7 @@ class Player(Character):
         super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
         self.firing = False
-        self.hitbox = pygame.Rect(320, 240, 16, 16)
+        self.hitbox = pygame.Rect(326, 246, 4, 4)
         self.xPosition = 320
         self.yPosition = 240
         self.dakkaDelay = 0

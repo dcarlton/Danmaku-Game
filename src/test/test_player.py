@@ -3,6 +3,7 @@ import sys
 
 sys.path.append("src/main")
 
+from Dakka import Dakka
 from Enumerations import EventType
 from Player import Player
 
@@ -34,11 +35,26 @@ def test_playerHitboxMovesWhenUpdated():
     player = Player()
     player.xPosition = 0
     player.yPosition = 0
+    hitboxLeft = player.hitbox.left
+    hitboxTop = player.hitbox.top
     player.xAcceleration = 1
     player.yAcceleration = 1
     player.update()
-    assert player.hitbox.left == 1
-    assert player.hitbox.top == 1
+    assert player.hitbox.left == hitboxLeft + 1
+    assert player.hitbox.top == hitboxTop + 1
+
+def test_playerHitboxSize():
+    # Give Player a constructor that takes a starting position
+    player = Player()
+    player.hitbox.left = 0
+    player.hitbox.top = 0
+    assert not player.hitbox.colliderect(pygame.Rect(4, 4, 1000, 1000))
+
+def test_playerCanBeHit():
+    player = Player()
+    dakka = Dakka(320, 240)
+    dakka.target = "Player"
+    assert player.hitbox.colliderect(dakka.hitbox) and player.hit(dakka)
 
 def test_playerFiresDakka():
     player = Player()

@@ -22,7 +22,6 @@ pygame.event.set_allowed([pygame.KEYDOWN,
 
 
 player = Player()
-player.hitbox.move_ip(player.xPosition, player.yPosition)
 player.register()
 
 enemy1 = Enemy(100, 100)

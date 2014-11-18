@@ -21,7 +21,8 @@ pygame.event.set_allowed([pygame.KEYDOWN,
                           EventType.unregisterDakka,
                           EventType.registerCharacter,
                           EventType.unregisterCharacter,
-                          EventType.outOfLives
+                          EventType.outOfLives,
+                          EventType.win
                           ])
 
 
@@ -51,7 +52,14 @@ Stage1RotateEnemy(540, 400)
 clock = pygame.time.Clock()
 while True:
     updater.update()
+    # THIS CODE SHOULD BE IN A STAGE
+    if len(updater.characters) == 1:
+        event = pygame.event.Event(EventType.win)
+        pygame.event.post(event)
     for event in pygame.event.get(EventType.outOfLives):
         print "Game over! You lose!"
+        exit()
+    for event in pygame.event.get(EventType.win):
+        print "You win!"
         exit()
     clock.tick(60)

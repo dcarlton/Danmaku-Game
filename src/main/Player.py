@@ -6,13 +6,13 @@ from Dakka import Dakka
 from Enumerations import EventType
 
 class Player(Character):
-    def __init__(self):
+    def __init__(self, x = MAP_WIDTH / 2, y = MAP_HEIGHT - 100):
         super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
         self.firing = False
         self.lives = 2
-        self.xPosition = MAP_WIDTH / 2
-        self.yPosition = MAP_HEIGHT - 100
+        self.xPosition = x
+        self.yPosition = y
         self.hitbox = pygame.Rect(self.xPosition + 6, self.yPosition + 6, 4, 4)
         self.dakkaDelay = 0
 

@@ -18,7 +18,8 @@ pygame.event.set_allowed([pygame.KEYDOWN,
                           EventType.registerDakka,
                           EventType.unregisterDakka,
                           EventType.registerCharacter,
-                          EventType.unregisterCharacter
+                          EventType.unregisterCharacter,
+                          EventType.outOfLives
                           ])
 
 
@@ -52,4 +53,7 @@ enemy6.register()
 clock = pygame.time.Clock()
 while True:
     updater.update()
+    for event in pygame.event.get(EventType.outOfLives):
+        print "Game over! You lose!"
+        exit()
     clock.tick(60)

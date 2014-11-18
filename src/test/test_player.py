@@ -52,9 +52,20 @@ def test_playerHitboxSize():
 
 def test_playerCanBeHit():
     player = Player()
+    lives = player.lives
     dakka = Dakka(player.xPosition, player.yPosition)
     dakka.target = "Player"
-    assert player.hitbox.colliderect(dakka.hitbox) and player.hit(dakka)
+    assert player.hitbox.colliderect(dakka.hitbox)
+    assert player.hit(dakka)
+    assert player.lives == lives - 1
+
+def test_playerRunsOutOfLives():
+    player = Player()
+    player.lives = 0
+    dakka = Dakka(player.xPosition, player.yPosition)
+    dakka.target = "Player"
+    assert player.hit(dakka)
+    assert pygame.event.get(EventType.outOfLives)[0]
 
 def test_playerFiresDakka():
     player = Player()

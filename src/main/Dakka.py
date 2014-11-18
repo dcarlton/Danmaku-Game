@@ -1,5 +1,6 @@
 import pygame
 
+from Constants import *
 from Enumerations import EventType
 from Object import Object
 
@@ -22,6 +23,6 @@ class Dakka(Object):
 
     def update(self):
         super(Dakka, self).update()
-        if self.xPosition < 0 or self.xPosition > 640 or self.yPosition < 0 or self.yPosition > 480:
+        if self.xPosition < 0 or self.xPosition > (MAP_WIDTH - 1) or self.yPosition < 0 or self.yPosition > (MAP_HEIGHT - 1):
             self.unregister()
             return

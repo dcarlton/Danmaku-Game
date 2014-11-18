@@ -3,12 +3,13 @@ import thread
 import sys
 
 sys.path.append("src/main")
+from Constants import *
 from Enemy import Enemy
 from Enumerations import EventType
 from Player import Player
 from Updater import Updater
 
-screen = pygame.display.set_mode((640, 480))
+screen = pygame.display.set_mode((MAP_WIDTH, MAP_HEIGHT))
 updater = Updater()
 
 pygame.event.set_allowed(None)

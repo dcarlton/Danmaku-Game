@@ -52,7 +52,7 @@ def test_playerHitboxSize():
 
 def test_playerCanBeHit():
     player = Player()
-    dakka = Dakka(320, 240)
+    dakka = Dakka(player.xPosition, player.yPosition)
     dakka.target = "Player"
     assert player.hitbox.colliderect(dakka.hitbox) and player.hit(dakka)
 

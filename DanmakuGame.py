@@ -1,9 +1,11 @@
 import pygame
-import thread
 import sys
+import time
+import math
 
 sys.path.append("src/main")
 from Constants import *
+from Dakka import Dakka
 from Enemy import Enemy
 from Enumerations import EventType
 from Player import Player
@@ -26,29 +28,25 @@ pygame.event.set_allowed([pygame.KEYDOWN,
 player = Player()
 player.register()
 
-enemy1 = Enemy(100, 100)
-thread.start_new_thread(enemy1.fire, ())
-enemy1.register()
+class Stage1RotateEnemy(Enemy):
+    def pattern(self):
+        angle = 1.5 * math.pi
+        while True:
+            dakka = self.makeDakka(self.xPosition, self.yPosition)
+            dakka.xSpeed = 6 * math.sin(angle)
+            dakka.ySpeed = 6 * math.cos(angle)
+            dakka.target = "Player"
+            dakka.register()
 
-enemy2 = Enemy(540, 100)
-thread.start_new_thread(enemy2.fire, ())
-enemy2.register()
+            angle += (0.25 * math.pi)
+            time.sleep(0.25)
 
-enemy3 = Enemy(100, 250)
-thread.start_new_thread(enemy3.fire, ())
-enemy3.register()
-
-enemy4 = Enemy(540, 250)
-thread.start_new_thread(enemy4.fire, ())
-enemy4.register()
-
-enemy5 = Enemy(100, 400)
-thread.start_new_thread(enemy5.fire, ())
-enemy5.register()
-
-enemy6 = Enemy(540, 400)
-thread.start_new_thread(enemy6.fire, ())
-enemy6.register()
+Stage1RotateEnemy(100, 100)
+Stage1RotateEnemy(540, 100)
+Stage1RotateEnemy(100, 250)
+Stage1RotateEnemy(540, 250)
+Stage1RotateEnemy(100, 400)
+Stage1RotateEnemy(540, 400)
 
 clock = pygame.time.Clock()
 while True:

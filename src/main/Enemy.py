@@ -1,7 +1,8 @@
+import pygame
 import math
+import sys
 import thread
 import time
-import pygame
 
 from Character import Character
 from Dakka import Dakka
@@ -10,30 +11,31 @@ from Enumerations import EventType
 class Enemy(Character):
     def __init__(self, x, y):
         super(Enemy, self).__init__()
+        self.alive = True
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
         self.hitbox = pygame.Rect(x, y, 16, 16)
-        self.hp = 50
+        self.hp = 1
         self.xPosition = x
         self.yPosition = y
 
-    def fire(self):
-        angle = 1.5 * math.pi
-        while True:
-            if self.hp <= 0:
-                self.unregister()
-                thread.exit()
-
-            dakka = Dakka(self.xPosition, self.yPosition)
-            dakka.xSpeed = 6 * math.sin(angle)
-            dakka.ySpeed = 6 * math.cos(angle)
-            dakka.target = "Player"
-            dakka.register()
-
-            angle += (0.25 * math.pi)
-            time.sleep(0.25)
+        thread.start_new_thread(self.pattern, ())
+        self.register()
 
     def hit(self, dakka):
         if dakka.target == "Enemy":
             self.hp -= 1
+            if self.hp <= 0:
+                self.alive = False
+                self.unregister()
             return True
         return False
+
+    def makeDakka(self, x, y):
+        if self.alive:
+            return Dakka(x, y)
+        else:
+            # Kill the thread!
+            sys.exit()
+
+    def pattern(self):
+        pass

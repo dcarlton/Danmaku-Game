@@ -58,7 +58,6 @@ def test_updaterUpdatesCharacterPosition():
     enemy.xSpeed = 5
 
     updater = Updater()
-    updater.characters.append(enemy)
     updater.update()
     assert enemy.xPosition == 5
 

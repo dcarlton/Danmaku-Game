@@ -10,6 +10,7 @@ from Player import Player
 pygame.display.set_mode((640, 480))
 
 def test_playerRegister():
+    pygame.event.clear()
     player = Player()
     player.register()
     event = pygame.event.get(EventType.registerCharacter)[0]

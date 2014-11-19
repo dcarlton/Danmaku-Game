@@ -31,15 +31,13 @@ player.register()
 
 class Stage1RotateEnemy(Enemy):
     def pattern(self):
-        angle = 1.5 * math.pi
         while True:
+            angle = math.atan2(player.yPosition - self.yPosition, player.xPosition - self.xPosition)
             dakka = self.makeDakka(self.xPosition, self.yPosition)
-            dakka.xSpeed = 6 * math.sin(angle)
-            dakka.ySpeed = 6 * math.cos(angle)
+            dakka.xSpeed = 6 * math.cos(angle)
+            dakka.ySpeed = 6 * math.sin(angle)
             dakka.target = "Player"
             dakka.register()
-
-            angle += (0.25 * math.pi)
             time.sleep(0.25)
 
 Stage1RotateEnemy(100, 100)

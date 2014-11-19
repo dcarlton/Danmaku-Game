@@ -40,12 +40,12 @@ class Stage1RotateEnemy(Enemy):
             dakka.register()
             time.sleep(0.25)
 
-Stage1RotateEnemy(100, 100)
-Stage1RotateEnemy(540, 100)
-Stage1RotateEnemy(100, 250)
-Stage1RotateEnemy(540, 250)
-Stage1RotateEnemy(100, 400)
-Stage1RotateEnemy(540, 400)
+Stage1RotateEnemy(200, 100)
+Stage1RotateEnemy(250, 100)
+Stage1RotateEnemy(300, 100)
+Stage1RotateEnemy(350, 100)
+Stage1RotateEnemy(400, 100)
+Stage1RotateEnemy(450, 100)
 
 clock = pygame.time.Clock()
 while True:

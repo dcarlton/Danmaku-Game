@@ -33,9 +33,7 @@ def test_playerMovesWhenUpdated():
     assert player.yPosition == 1
 
 def test_playerHitboxMovesWhenUpdated():
-    player = Player()
-    player.xPosition = 0
-    player.yPosition = 0
+    player = Player(0, 0)
     hitboxLeft = player.hitbox.left
     hitboxTop = player.hitbox.top
     player.xAcceleration = 1

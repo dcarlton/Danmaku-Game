@@ -5,8 +5,8 @@ sys.path.append("src/main")
 
 from Character import Character
 from Dakka import Dakka
-from Enemy import Enemy
 from Enumerations import EventType
+from Player import Player
 from Updater import Updater
 
 pygame.display.set_mode((640, 480))
@@ -54,21 +54,26 @@ def test_updaterUpdatesDakkaPosition():
     assert dakka.xPosition == 5
 
 def test_updaterUpdatesCharacterPosition():
-    enemy = Enemy(0, 0)
-    enemy.xSpeed = 5
+    character = Character()
+    character.xPosition = 0
+    character.yPosition = 0
+    character.xSpeed = 5
+    character.hitbox = pygame.Rect(0, 0, 0, 0)
+    character.image = pygame.Surface((0, 0))
+    character.register()
 
     updater = Updater()
     updater.update()
-    assert enemy.xPosition == 5
+    assert character.xPosition == 5
 
 def test_updaterDetectsCollisions():
     updater = Updater()
 
-    enemy = Enemy(0, 0)
-    updater.characters.append(enemy)
+    player = Player(0, 0)
+    updater.characters.append(player)
 
     dakka = Dakka(0, 0)
-    dakka.target = "Enemy"
+    dakka.target = "Player"
     updater.dakkaList.append(dakka)
 
     updater.update()

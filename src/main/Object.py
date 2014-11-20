@@ -8,6 +8,8 @@ class Object(object):
         self.yAcceleration = 0
 
         self.hitbox = None
+        self.hitboxXOffset = 0
+        self.hitboxYOffset = 0
         self.image = None
 
     def update(self):
@@ -15,5 +17,5 @@ class Object(object):
         self.ySpeed += self.yAcceleration
         self.xPosition += self.xSpeed
         self.yPosition += self.ySpeed
-        self.hitbox.left += self.xSpeed
-        self.hitbox.top += self.ySpeed
+        self.hitbox.left = self.xPosition + self.hitboxXOffset
+        self.hitbox.top = self.yPosition + self.hitboxYOffset

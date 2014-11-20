@@ -13,7 +13,9 @@ class Player(Character):
         self.lives = 2
         self.xPosition = x
         self.yPosition = y
-        self.hitbox = pygame.Rect(self.xPosition + 6, self.yPosition + 6, 4, 4)
+        self.hitbox = pygame.Rect(x + 6, y + 6, 4, 4)
+        self.hitboxXOffset = 6
+        self.hitboxYOffset = 6
         self.dakkaDelay = 0
 
     def fire(self):

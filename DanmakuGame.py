@@ -31,21 +31,24 @@ player.register()
 
 class Stage1RotateEnemy(Enemy):
     def pattern(self):
-        while True:
+        try:
+          while True:
             angle = math.atan2(player.yPosition - self.yPosition, player.xPosition - self.xPosition)
-            dakka = self.makeDakka(self.xPosition, self.yPosition)
+            dakka = Dakka(self.xPosition, self.yPosition)
             dakka.xSpeed = 6 * math.cos(angle)
             dakka.ySpeed = 6 * math.sin(angle)
             dakka.target = "Player"
             dakka.register()
             time.sleep(0.25)
+        except:
+          pass
 
-Stage1RotateEnemy(200, 100)
-Stage1RotateEnemy(250, 100)
-Stage1RotateEnemy(300, 100)
-Stage1RotateEnemy(350, 100)
-Stage1RotateEnemy(400, 100)
-Stage1RotateEnemy(450, 100)
+Stage1RotateEnemy(200, 100).init()
+Stage1RotateEnemy(250, 100).init()
+Stage1RotateEnemy(300, 100).init()
+Stage1RotateEnemy(350, 100).init()
+Stage1RotateEnemy(400, 100).init()
+Stage1RotateEnemy(450, 100).init()
 
 clock = pygame.time.Clock()
 while True:

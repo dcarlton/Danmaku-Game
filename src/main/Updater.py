@@ -21,13 +21,13 @@ class Updater:
     def update(self):
         self.screen.fill((255, 255, 255))
         self.checkEvents()
+        for character in self.characters:
+            character.update()
+            self.screen.blit(character.image, (character.xPosition, character.yPosition))
         for dakka in self.dakkaList:
             for character in self.characters:
                 if dakka.hitbox.colliderect(character.hitbox) and character.hit(dakka):
                     dakka.unregister()
             dakka.update()
             self.screen.blit(dakka.image, (dakka.xPosition, dakka.yPosition))
-        for character in self.characters:
-            character.update()
-            self.screen.blit(character.image, (character.xPosition, character.yPosition))
         pygame.display.flip()

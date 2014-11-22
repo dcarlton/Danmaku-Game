@@ -16,12 +16,17 @@ class Enemy(Character):
         self.yPosition = y
         self.thread = None
 
+    def die(self):
+        self.unregister()
+        if self.thread is not None:
+            stopit.async_raise(self.thread, Exception)
+            self.thread = None
+
     def hit(self, dakka):
         if dakka.target == "Enemy":
             self.hp -= 1
             if self.hp <= 0:
-                self.unregister()
-                stopit.async_raise(self.thread, Exception)
+                self.die()
             return True
         return False
 

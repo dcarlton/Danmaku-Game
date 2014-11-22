@@ -6,6 +6,9 @@ from Dakka import Dakka
 from Enumerations import EventType
 
 class Player(Character):
+    x = None
+    y = None
+
     def __init__(self, x = MAP_WIDTH / 2, y = MAP_HEIGHT - 100):
         super(Player, self).__init__()
         self.image = pygame.image.load("images/KyokoStanding.png").convert()
@@ -13,6 +16,8 @@ class Player(Character):
         self.lives = 2
         self.xPosition = x
         self.yPosition = y
+        Player.x = x
+        Player.y = y
         self.hitbox = pygame.Rect(x + 6, y + 6, 4, 4)
         self.hitboxXOffset = 6
         self.hitboxYOffset = 6
@@ -66,6 +71,8 @@ class Player(Character):
                     self.firing = False
 
         super(Player, self).update()
+        Player.x = self.xPosition
+        Player.y = self.yPosition
 
         if self.firing:
             self.fire()

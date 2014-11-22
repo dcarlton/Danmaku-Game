@@ -23,12 +23,24 @@ class Starter:
         while True:
             updater.update()
             for event in pygame.event.get(EventType.outOfLives):
-                print "Game over! You lose!"
+                pygame.font.init()
+                text = pygame.font.SysFont(None, 120).render("You lost!", False, (0, 0, 0))
+                pygame.display.get_surface().blit(text, (100, 200))
+                pygame.display.flip()
+                import time
+                time.sleep(3)
+
                 if Starter.gameThread is not None:
                     stopit.async_raise(Starter.gameThread, Exception)
                 return
             for event in pygame.event.get(EventType.win):
-                print "You win!"
+                pygame.font.init()
+                text = pygame.font.SysFont(None, 120).render("You win!", False, (0, 0, 0))
+                pygame.display.get_surface().blit(text, (100, 200))
+                pygame.display.flip()
+                import time
+                time.sleep(3)
+
                 if Starter.gameThread is not None:
                     stopit.async_raise(Starter.gameThread, Exception)
                 return

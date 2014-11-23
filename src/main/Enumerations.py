@@ -7,3 +7,4 @@ class EventType:
     unregisterCharacter = pygame.USEREVENT + 3
     outOfLives = pygame.USEREVENT + 4
     win = pygame.USEREVENT + 5
+    endSpellcard = pygame.USEREVENT + 6

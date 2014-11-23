@@ -8,6 +8,7 @@ sys.path.append("src/main/stage1")
 from Enumerations import EventType
 from Player import Player
 from Stage1PreMiniBoss import Stage1PreMiniBoss
+from Stage1MiniBoss import Stage1MiniBoss
 from Updater import Updater
 
 class Starter:
@@ -23,26 +24,24 @@ class Starter:
         while True:
             updater.update()
             for event in pygame.event.get(EventType.outOfLives):
+                if Starter.gameThread is not None:
+                    stopit.async_raise(Starter.gameThread, Exception)
                 pygame.font.init()
                 text = pygame.font.SysFont(None, 120).render("You lost!", False, (0, 0, 0))
                 pygame.display.get_surface().blit(text, (100, 200))
                 pygame.display.flip()
                 import time
                 time.sleep(3)
-
-                if Starter.gameThread is not None:
-                    stopit.async_raise(Starter.gameThread, Exception)
                 return
             for event in pygame.event.get(EventType.win):
+                if Starter.gameThread is not None:
+                    stopit.async_raise(Starter.gameThread, Exception)
                 pygame.font.init()
                 text = pygame.font.SysFont(None, 120).render("You win!", False, (0, 0, 0))
                 pygame.display.get_surface().blit(text, (100, 200))
                 pygame.display.flip()
                 import time
                 time.sleep(3)
-
-                if Starter.gameThread is not None:
-                    stopit.async_raise(Starter.gameThread, Exception)
                 return
             clock.tick(60)
 
@@ -86,7 +85,8 @@ class Starter:
         pygame.event.post(event)
 
     def stage1(self):
-        Stage1PreMiniBoss()
+        #Stage1PreMiniBoss()
+        Stage1MiniBoss()
 
     def stage2(self):
         pass

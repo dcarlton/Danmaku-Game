@@ -16,7 +16,8 @@ pygame.event.set_allowed([pygame.KEYDOWN,
                           EventType.registerCharacter,
                           EventType.unregisterCharacter,
                           EventType.outOfLives,
-                          EventType.win
+                          EventType.win,
+                          EventType.endSpellcard
                           ])
 
 Starter().startCampaign()

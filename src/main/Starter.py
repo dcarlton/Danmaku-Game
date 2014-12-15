@@ -2,6 +2,7 @@ import pygame
 import stopit
 import sys
 import thread
+import time
 
 sys.path.append("src/main/stage1")
 
@@ -85,7 +86,8 @@ class Starter:
         pygame.event.post(event)
 
     def stage1(self):
-        #Stage1PreMiniBoss()
+        Stage1PreMiniBoss()
+        time.sleep(3)
         Stage1MiniBoss()
 
     def stage2(self):

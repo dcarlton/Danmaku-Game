@@ -25,8 +25,6 @@ class Enemy(Character):
     def hit(self, dakka):
         if dakka.target == "Enemy":
             self.hp -= 1
-            if self.hp <= 0:
-                self.die()
             return True
         return False
 
@@ -36,3 +34,8 @@ class Enemy(Character):
 
     def pattern(self):
         pass
+
+    def update(self):
+        super(Enemy, self).update()
+        if self.hp <= 0:
+            self.die()

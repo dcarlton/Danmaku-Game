@@ -1,5 +1,6 @@
 import pygame
 import random
+import thread
 import time
 
 from Boss import Boss
@@ -26,4 +27,5 @@ class Stage1MiniBoss(Boss):
                 dakka.register()
                 clock.tick(15)
         except:
-            pass
+            # A thread sending an exception to kill itself seems...ill-advised
+            thread.start_new_thread(self.die, ())

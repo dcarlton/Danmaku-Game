@@ -36,7 +36,6 @@ class Boss(Enemy):
         if self.attackThread is not None and self.timeoutThread is not None:
             stopit.async_raise(self.attackThread, Exception)
             self.attackThread = None
-            print "Sending exception"
             stopit.async_raise(self.timeoutThread, Exception)
             self.timeoutThread = None
             event = pygame.event.Event(EventType.endSpellcard)
@@ -52,11 +51,9 @@ class Boss(Enemy):
     def watchTimeout(self):
         try:
             while self.timeout > 0 and self.hp > 0:
-                print "Start sleep"
                 time.sleep(1)
-                print "Stop sleep"
                 self.timeout -= 1
                 print "Time remaining: " + str(self.timeout)
-            self.hp = 0
+            self.die()
         except:
             pass
